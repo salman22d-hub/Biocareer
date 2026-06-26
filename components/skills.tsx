@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useState } from 'react'
 import {
   FlaskConical,
   Sigma,
@@ -10,159 +10,81 @@ import {
 } from 'lucide-react'
 import { skillGroups } from '@/lib/portfolio-data'
 import { SectionHeading } from '@/components/section-heading'
+import { cn } from '@/lib/utils'
 
 const icons = [FlaskConical, Sigma, Sparkles, MessageSquare, Workflow]
 
 export function Skills() {
-  const duplicatedSkills = [...skillGroups, ...skillGroups, ...skillGroups, ...skillGroups]
-  
-  // Custom refs columns ki scroll position ko mouse wheel se fast karne ke liye
-  const col1Ref = useRef<HTMLDivElement>(null)
-  const col2Ref = useRef<HTMLDivElement>(null)
-  const col3Ref = useRef<HTMLDivElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const container = containerRef.current
-    if (!container) return
-
-    const handleWheel = (e: WheelEvent) => {
-      // DeltaY batata hai ke user kitna scroll kar raha hai
-      if (e.deltaY !== 0) {
-        // Taake standard page scroll hone ke bajaye pehle columns move hon
-        e.preventDefault()
-
-        const speedMultiplier = 1.8 // Is number ko barha kar aap scroll mazeed teiz kar sakte hain
-        const scrollAmount = e.deltaY * speedMultiplier
-
-        if (col1Ref.current) col1Ref.current.scrollTop += scrollAmount
-        if (col2Ref.current) col2Ref.current.scrollTop += scrollAmount * 0.8 // thoda variation ke liye
-        if (col3Ref.current) col3Ref.current.scrollTop += scrollAmount * 1.2
-      }
-    }
-
-    // Passive false lagana zaroori hai taake preventDefault kaam kare
-    container.addEventListener('wheel', handleWheel, { passive: false })
-    return () => container.removeEventListener('wheel', handleWheel)
-  }, [])
+  const [active, setActive] = useState<string>('All')
+  const filters = ['All', ...skillGroups.map((g) => g.category)]
+  const visible =
+    active === 'All'
+      ? skillGroups
+      : skillGroups.filter((g) => g.category === active)
 
   return (
     <section
       id="skills"
-      className="scroll-mt-20 border-y border-zinc-800 bg-black py-20 sm:py-24 overflow-hidden relative"
+      className="scroll-mt-20 border-y border-border bg-secondary/40 py-20 sm:py-24"
     >
-      {/* CSS Animation continuous chalegi, hover pause delete kar diya hai */}
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes v-marquee {
-          0% { transform: translateY(0); }
-          100% { transform: translateY(-33.33%); }
-        }
-        .v-scroll-normal { animation: v-marquee 30s linear infinite !important; }
-        .v-scroll-slow { animation: v-marquee 40s linear infinite !important; }
-        .v-scroll-fast { animation: v-marquee 22s linear infinite !important; }
-        
-        /* Hide scrollbars completely across browsers */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      `}} />
-
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Expertise"
           title="Core Competencies & Skills"
-          description="A 3D perspective into the blend of laboratory research, statistics, and agentic AI integration."
+          description="Filter by discipline to explore the blend of laboratory research, statistics, and modern computational tooling."
         />
 
-        <div className="mt-16 relative flex h-[600px] w-full flex-row items-center justify-center overflow-hidden rounded-xl">
-          
-          {/* Main 3D Tilted Grid Wrapper with ref */}
-          <div 
-            ref={containerRef}
-            className="mq-box grid h-full w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4"
-            style={{
-              transform: 'perspective(1200px) rotateX(24deg) rotateZ(-8deg) skewX(6deg)',
-              transformStyle: 'preserve-3d'
-            }}
-          >
-            
-            {/* Column 1 */}
-            <div ref={col1Ref} className="flex flex-col gap-6 overflow-y-auto h-full relative no-scrollbar scroll-smooth">
-              <div className="flex flex-col gap-6 v-scroll-normal">
-                {duplicatedSkills.map((group, idx) => {
-                  if (idx % 3 !== 0) return null
-                  const Icon = icons[idx % icons.length]
-                  return <SkillCard key={`col1-${idx}`} group={group} Icon={Icon} />
-                })}
-              </div>
-            </div>
+        <div className="mt-8 flex flex-wrap gap-2">
+          {filters.map((f) => (
+            <button
+              key={f}
+              type="button"
+              onClick={() => setActive(f)}
+              aria-pressed={active === f}
+              className={cn(
+                'rounded-full border px-4 py-2 text-sm font-medium transition-colors',
+                active === f
+                  ? 'border-primary bg-primary text-primary-foreground'
+                  : 'border-border bg-card text-muted-foreground hover:bg-accent hover:text-accent-foreground',
+              )}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
 
-            {/* Column 2 */}
-            <div ref={col2Ref} className="hidden sm:flex flex-col gap-6 overflow-y-auto h-full relative no-scrollbar scroll-smooth">
-              <div className="flex flex-col gap-6 v-scroll-slow">
-                {duplicatedSkills.map((group, idx) => {
-                  if (idx % 3 !== 1) return null
-                  const Icon = icons[idx % icons.length]
-                  return <SkillCard key={`col2-${idx}`} group={group} Icon={Icon} />
-                })}
-              </div>
-            </div>
-
-            {/* Column 3 */}
-            <div ref={col3Ref} className="hidden lg:flex flex-col gap-6 overflow-y-auto h-full relative no-scrollbar scroll-smooth">
-              <div className="flex flex-col gap-6 v-scroll-fast">
-                {duplicatedSkills.map((group, idx) => {
-                  if (idx % 3 !== 2) return null
-                  const Icon = icons[idx % icons.length]
-                  return <SkillCard key={`col3-${idx}`} group={group} Icon={Icon} />
-                })}
-              </div>
-            </div>
-
-          </div>
-
-          {/* Premium Fading Gradients */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-black to-transparent z-20" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent z-20" />
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {visible.map((group) => {
+            const Icon = icons[skillGroups.indexOf(group) % icons.length]
+            return (
+              <article
+                key={group.category}
+                className="flex flex-col rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-md"
+              >
+                <span className="inline-flex size-11 items-center justify-center rounded-xl bg-accent text-primary">
+                  <Icon className="size-5" />
+                </span>
+                <h3 className="mt-4 font-heading text-base font-bold">
+                  {group.category}
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                  {group.description}
+                </p>
+                <ul className="mt-4 flex flex-wrap gap-2">
+                  {group.skills.map((skill) => (
+                    <li
+                      key={skill}
+                      className="rounded-lg border border-border bg-secondary px-2.5 py-1 text-xs font-medium text-secondary-foreground"
+                    >
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            )
+          })}
         </div>
       </div>
     </section>
-  )
-}
-
-function SkillCard({ group, Icon }: { group: any; Icon: any }) {
-  return (
-    <article
-      className="flex flex-col justify-between rounded-xl border border-zinc-800/80 bg-zinc-950/90 p-5 shadow-xl transition-all duration-300 hover:border-zinc-600 hover:bg-zinc-900 backdrop-blur-sm group cursor-pointer"
-      style={{ transformStyle: 'preserve-3d' }}
-    >
-      <div>
-        <div className="flex items-center gap-3">
-          <span className="inline-flex size-9 items-center justify-center rounded-lg bg-zinc-900 text-zinc-100 border border-zinc-800 shadow-inner group-hover:bg-zinc-800 transition-colors">
-            <Icon className="size-4.5 stroke-[1.75]" />
-          </span>
-          <div>
-            <h3 className="font-heading text-sm font-semibold text-zinc-100 tracking-wide">
-              {group.category}
-            </h3>
-            <p className="text-[10px] text-zinc-500 font-mono">@biocareer</p>
-          </div>
-        </div>
-        
-        <p className="mt-3 text-xs leading-relaxed text-zinc-400">
-          {group.description}
-        </p>
-      </div>
-
-      <ul className="mt-4 flex flex-wrap gap-1">
-        {group.skills.map((skill: string) => (
-          <li
-            key={skill}
-            className="rounded bg-zinc-900 border border-zinc-800/60 px-2 py-0.5 text-[10px] font-medium text-zinc-300"
-          >
-            {skill}
-          </li>
-        ))}
-      </ul>
-    </article>
   )
 }
