@@ -13,27 +13,23 @@ import { SectionHeading } from '@/components/section-heading'
 const icons = [FlaskConical, Sigma, Sparkles, MessageSquare, Workflow]
 
 export function Skills() {
-  const duplicatedSkills = [...skillGroups, ...skillGroups, ...skillGroups]
+  // Infinite scroll ke liye data ko copy kar rahe hain
+  const duplicatedSkills = [...skillGroups, ...skillGroups, ...skillGroups, ...skillGroups]
 
   return (
     <section
       id="skills"
       className="scroll-mt-20 border-y border-zinc-800 bg-black py-20 sm:py-24 overflow-hidden relative"
     >
-      {/* 100% Build-safe standard CSS Injection */}
+      {/* Hover pause rule has been completely removed from here */}
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes v-marquee {
           0% { transform: translateY(0); }
-          100% { transform: translateY(-50%); }
+          100% { transform: translateY(-33.33%); }
         }
-        .v-scroll-normal { animation: v-marquee 30s linear infinite; }
-        .v-scroll-slow { animation: v-marquee 40s linear infinite; }
-        .v-scroll-fast { animation: v-marquee 25s linear infinite; }
-        .mq-box:hover .v-scroll-normal,
-        .mq-box:hover .v-scroll-slow,
-        .mq-box:hover .v-scroll-fast {
-          animation-play-state: paused;
-        }
+        .v-scroll-normal { animation: v-marquee 25s linear infinite !important; }
+        .v-scroll-slow { animation: v-marquee 35s linear infinite !important; }
+        .v-scroll-fast { animation: v-marquee 18s linear infinite !important; }
       `}} />
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10">
@@ -43,7 +39,7 @@ export function Skills() {
           description="A 3D perspective into the blend of laboratory research, statistics, and agentic AI integration."
         />
 
-        <div className="mt-16 relative flex h-[550px] w-full flex-row items-center justify-center overflow-hidden rounded-xl">
+        <div className="mt-16 relative flex h-[600px] w-full flex-row items-center justify-center overflow-hidden rounded-xl">
           
           <div 
             className="mq-box grid h-full w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4"
@@ -88,6 +84,7 @@ export function Skills() {
 
           </div>
 
+          {/* Fading Gradients Overlays */}
           <div className="pointer-events-none absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-black to-transparent z-20" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent z-20" />
         </div>
