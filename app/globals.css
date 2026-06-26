@@ -137,16 +137,3 @@
     scroll-padding-top: 5rem;
   }
 }
-
-@layer utilities {
-  .text-gradient {
-    background: linear-gradient(
-      100deg,
-      var(--foreground),
-      var(--primary) 90%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-}
