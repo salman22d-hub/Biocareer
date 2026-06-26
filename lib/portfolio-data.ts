@@ -1,7 +1,7 @@
 export const profile = {
   name: 'Dr. Salman Waheed',
   title: 'Life Sciences Professional | Researcher | AI & Data Operations Leader',
-  bio: 'Dedicated and highly analytical Life Sciences Professional and Researcher with a strong foundational background in cellular mechanics, biological research, and statistical analysis. Proven track record of executing rigorous experimental designs, managing technical operations, and publishing peer-reviewed scientific literature. Combines deep scientific knowledge with modern computational skills, AI tools, and data analysis to drive innovation. Adaptable and motivated to contribute to high-quality biological research, project management, and technology-driven operations in national and international organizations.',
+  bio: 'Dedicated and highly analytical Life Sciences Professional and Researcher with a strong foundational background in complex biological systems, epidemiology concepts, and longitudinal data analysis. Proven track record of executing rigorous experimental designs, managing technical operations, and publishing peer-reviewed scientific literature. Combines biomedical research foundations with modern computational workflows, Python, and AI tools to bridge the gap between data science and health trajectories. Adaptable and motivated to contribute to high-quality health research.',
   location: 'House #9, Street #22, X Block, Peoples Colony, Gujranwala, Pakistan',
   email: 'salman22d@gmail.com',
   phone: '+92 333 8178717',
@@ -35,8 +35,7 @@ export const skillGroups: {
 }[] = [
   {
     category: 'Research & Methodology',
-    description:
-      'Designing and running rigorous, reproducible biological experiments.',
+    description: 'Designing and running rigorous, reproducible biological experiments.',
     skills: [
       'Experimental Design',
       'Data Collection',
@@ -52,7 +51,7 @@ export const skillGroups: {
       'SPSS (Two-way ANOVA)',
       'Regression Analysis',
       'Post-hoc Tests',
-      'Basic Python',
+      'Python (Pandas/NumPy)',
       'Data Scraping',
       'Research Literature Mining',
     ],
@@ -81,8 +80,7 @@ export const skillGroups: {
   },
   {
     category: 'Technical Adaptability',
-    description:
-      'Rapidly mastering complex automated and computational pipelines.',
+    description: 'Rapidly mastering complex automated and computational pipelines.',
     skills: [
       'Automated Workflows',
       'Technical Pipelines',
@@ -113,7 +111,7 @@ export const experiences = [
     current: true,
     points: [
       'Explore and integrate AI frameworks and digital tools to optimize business workflows and data processing.',
-      'Assist in technical tasks utilizing Python basics, data scraping, and prompt engineering.',
+      'Assist in technical tasks utilizing Python (Pandas/NumPy) for data extraction, restructuring, and prompt engineering.',
     ],
   },
   {
@@ -177,9 +175,9 @@ export const education = [
 
 export const research = {
   project: {
-    title: 'M. Phil Research Project',
+    title: 'M. Phil Research Project (Computational Epidemiology focus)',
     description:
-      "Designed and executed controlled biological experiments comparing alternative cryoprotective extender formulations, evaluating post-thaw semen quality traits using two-way ANOVA and Duncan's Multiple Range Test in SPSS.",
+      "Designed and executed a controlled epidemiological study comparing biological and nutritional compositions of five distinct cryoprotective extender formulations. Managed large-scale longitudinal tracking of 30 pooled datasets from controlled cohorts over a 10-week period, using two-way ANOVA and Duncan's Multiple Range Test in SPSS.",
   },
   publications: [
     {
