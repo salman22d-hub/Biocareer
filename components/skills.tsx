@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef, useEffect } from 'react'
 import {
   FlaskConical,
   Sigma,
@@ -13,23 +14,56 @@ import { SectionHeading } from '@/components/section-heading'
 const icons = [FlaskConical, Sigma, Sparkles, MessageSquare, Workflow]
 
 export function Skills() {
-  // Infinite scroll ke liye data ko copy kar rahe hain
   const duplicatedSkills = [...skillGroups, ...skillGroups, ...skillGroups, ...skillGroups]
+  
+  // Custom refs columns ki scroll position ko mouse wheel se fast karne ke liye
+  const col1Ref = useRef<HTMLDivElement>(null)
+  const col2Ref = useRef<HTMLDivElement>(null)
+  const col3Ref = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const handleWheel = (e: WheelEvent) => {
+      // DeltaY batata hai ke user kitna scroll kar raha hai
+      if (e.deltaY !== 0) {
+        // Taake standard page scroll hone ke bajaye pehle columns move hon
+        e.preventDefault()
+
+        const speedMultiplier = 1.8 // Is number ko barha kar aap scroll mazeed teiz kar sakte hain
+        const scrollAmount = e.deltaY * speedMultiplier
+
+        if (col1Ref.current) col1Ref.current.scrollTop += scrollAmount
+        if (col2Ref.current) col2Ref.current.scrollTop += scrollAmount * 0.8 // thoda variation ke liye
+        if (col3Ref.current) col3Ref.current.scrollTop += scrollAmount * 1.2
+      }
+    }
+
+    // Passive false lagana zaroori hai taake preventDefault kaam kare
+    container.addEventListener('wheel', handleWheel, { passive: false })
+    return () => container.removeEventListener('wheel', handleWheel)
+  }, [])
 
   return (
     <section
       id="skills"
       className="scroll-mt-20 border-y border-zinc-800 bg-black py-20 sm:py-24 overflow-hidden relative"
     >
-      {/* Hover pause rule has been completely removed from here */}
+      {/* CSS Animation continuous chalegi, hover pause delete kar diya hai */}
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes v-marquee {
           0% { transform: translateY(0); }
           100% { transform: translateY(-33.33%); }
         }
-        .v-scroll-normal { animation: v-marquee 25s linear infinite !important; }
-        .v-scroll-slow { animation: v-marquee 35s linear infinite !important; }
-        .v-scroll-fast { animation: v-marquee 18s linear infinite !important; }
+        .v-scroll-normal { animation: v-marquee 30s linear infinite !important; }
+        .v-scroll-slow { animation: v-marquee 40s linear infinite !important; }
+        .v-scroll-fast { animation: v-marquee 22s linear infinite !important; }
+        
+        /* Hide scrollbars completely across browsers */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}} />
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10">
@@ -41,7 +75,9 @@ export function Skills() {
 
         <div className="mt-16 relative flex h-[600px] w-full flex-row items-center justify-center overflow-hidden rounded-xl">
           
+          {/* Main 3D Tilted Grid Wrapper with ref */}
           <div 
+            ref={containerRef}
             className="mq-box grid h-full w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4"
             style={{
               transform: 'perspective(1200px) rotateX(24deg) rotateZ(-8deg) skewX(6deg)',
@@ -50,7 +86,7 @@ export function Skills() {
           >
             
             {/* Column 1 */}
-            <div className="flex flex-col gap-6 overflow-hidden h-full relative">
+            <div ref={col1Ref} className="flex flex-col gap-6 overflow-y-auto h-full relative no-scrollbar scroll-smooth">
               <div className="flex flex-col gap-6 v-scroll-normal">
                 {duplicatedSkills.map((group, idx) => {
                   if (idx % 3 !== 0) return null
@@ -61,7 +97,7 @@ export function Skills() {
             </div>
 
             {/* Column 2 */}
-            <div className="hidden sm:flex flex-col gap-6 overflow-hidden h-full relative">
+            <div ref={col2Ref} className="hidden sm:flex flex-col gap-6 overflow-y-auto h-full relative no-scrollbar scroll-smooth">
               <div className="flex flex-col gap-6 v-scroll-slow">
                 {duplicatedSkills.map((group, idx) => {
                   if (idx % 3 !== 1) return null
@@ -72,7 +108,7 @@ export function Skills() {
             </div>
 
             {/* Column 3 */}
-            <div className="hidden lg:flex flex-col gap-6 overflow-hidden h-full relative">
+            <div ref={col3Ref} className="hidden lg:flex flex-col gap-6 overflow-y-auto h-full relative no-scrollbar scroll-smooth">
               <div className="flex flex-col gap-6 v-scroll-fast">
                 {duplicatedSkills.map((group, idx) => {
                   if (idx % 3 !== 2) return null
@@ -84,7 +120,7 @@ export function Skills() {
 
           </div>
 
-          {/* Fading Gradients Overlays */}
+          {/* Premium Fading Gradients */}
           <div className="pointer-events-none absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-black to-transparent z-20" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent z-20" />
         </div>
